@@ -67,6 +67,11 @@ module.exports = {
         await ctx.telegram.sendLocation(ctx.chat.id, 43.231863, 76.832276)
         ctx.replyWithMarkdown(messages.location, keyboard(messages.menu.buttons).oneTime().resize().extra())
     },
+    'contacts': ctx => {
+        // import message in file
+        let messages = yaml.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))
+        ctx.replyWithMarkdown(messages.contacts, keyboard(messages.menu.buttons).oneTime().resize().extra())
+    },
     'faq': ctx => {
         // import message in file
         let messages = yaml.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))
