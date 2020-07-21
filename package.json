@@ -1,0 +1,27 @@
+{
+  "name": "elab.asia-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "keywords": [
+    "elab",
+    "bot",
+    "telegram",
+    "fuka"
+  ],
+  "author": "ELab",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "got": "^11.5.1",
+    "js-yaml": "^3.14.0",
+    "mongoose": "^5.9.24",
+    "nodemailer": "^6.4.10",
+    "string-compiler": "0.0.3",
+    "telegraf": "^3.38.0"
+  }
+}

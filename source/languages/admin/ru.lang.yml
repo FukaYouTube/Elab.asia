@@ -1,0 +1,104 @@
+welcome: Добро пожаловать ${user.first_name}!
+
+menu:
+  buttons: [
+    ["Список клиентов"],
+    ["Отправить всем рассылку"],
+    ["Помощь"]
+  ]
+
+clients-info:
+  header-text: |
+    Список всех клиентов которые пользуется ботом:
+  
+  body-text: |
+    ID клиента: ${client._id}
+    Имя: ${client.client_first_name}
+    Фамилия: ${client.client_last_name}
+    Номер телефона: ${client.client_phone}
+    Электронная почта: ${client.client_email}
+    Статус: ${client._is_admin ? 'Администратор' : 'Клиент'}
+    ${client._is_black_list ? 'Клиент в чёрном списке' : ''}
+    
+    Чтобы узнать подробности об этом клиенте, отправьте команду:
+    /view_client ${client._id}
+    Чтобы добавить клиента в черный список, отправьте команду:
+    /add_black_list ${client._id}
+    ------
+
+  body-more-text: |
+    ID клиента: ${client._id}
+    Telegram username: ${client.telegram_username ? '@' + client.telegram_username : undefined}
+    Telegram first_name: ${client.telegram_first_name}
+
+    Имя: ${client.client_first_name}
+    Фамилия: ${client.client_last_name}
+    Номер телефона: ${client.client_phone}
+    Электорнная почта: ${client.client_email}
+    Статус: ${client._is_admin ? 'Администратор' : 'Клиент'}
+    ${client._is_black_list ? 'Клиент в черном списке' : ''}
+    ID заявки: ${client.client_id}
+    Номер заявки: ${client.client_app_number}
+    Дата заявки: ${client.client_app_data}
+    Язык: ${client.client_lang}
+    Дата авторизаций в боте: ${client.data.getDate() > 10 ? client.data.getDate() : '0' + client.data.getDate()}.${(client.data.getMonth() + 1) > 10 ? (client.data.getMonth() + 1) : '0' + (client.data.getMonth() + 1)}.${client.data.getFullYear()}
+    ------
+
+  course:
+    info: |
+      ID курса: ${course.course_id}
+      Название курса: "${course.course_name}"
+      Цена курса: ${course.course_amount}
+      Статус: ${course.course_is_paid == 1 ? 'Оплачено' : 'Не оплачено'}
+    
+  success: 
+    black_list-added: Пользователь ${client.telegram_first_name} добавлен в черный список!
+    black_list-remove: Пользователь ${client.telegram_first_name} удален с черного списка!
+
+
+news-post:
+  text: |
+    Отправьте ваше сообщение для рассылки всем клиентом:
+    Можно отправить:
+      - Обычный текст
+      - Фотографию с описанием и без
+      - Видео с описанием и без
+
+    Внимание: Данное сообщение опубликовано вами, будут отправлены всем клиентам!
+
+  button: ["Отменить"]
+  cancel-text: Действие было отменено!
+
+  success-send: |
+    Ваше сообщение было отправлено всем клиентам!
+
+help: |
+  Добрый день ${user.first_name}!
+  Если у вас пропали кнопки, отправьте команду /panels
+
+  Доступные команды:
+  /view_client и id клиента - подробная информация клиента
+  Пример: /view_client 123456
+
+  /add_black_list и id клиента - добавить клиента в черный список
+  Пример: /add_black_list 123456
+
+  /remove_black_list и id клиента - удалить клиента с черного списка
+  Пример: /remove_black_list 123456
+
+  /send_message и id клиента - отправить сообщение пользователю
+  Пример: /send_message 123456
+
+send-to-support:
+  text: |
+    Отправьте пользователю ${client.client_last_name || client.telegram_first_name} ${client.client_first_name || ''} сообщение:
+  
+  button: ["Отмена"]
+
+  success:
+    cancel-text: Действие было отменено!
+    send: Ваше сообщение отправлено!
+
+  error:
+    not-text: Произошла ошибка, пожалуйста, отправьте только текст!
+    not-client: Произошла ошибка, клиент не найден! Повторите пожалуйста попытку

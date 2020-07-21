@@ -1,0 +1,106 @@
+welcome: ${user.first_name} қош келдіңіз!
+
+menu:
+  buttons: [
+    ["Тіркелушілер тізімі"],
+    ["Барлығына тарату тізімін жіберу"],
+    ["Көмектесіңдер"]
+  ]
+
+clients-info:
+  header-text: |
+    Ботты қолданатын барлық тіркелушілер тізімі:
+  
+  body-text: |
+    Тіркелуші идентификаторы: ${client._id}
+    Аты: ${client.client_first_name}
+    Тегі: ${client.client_last_name}
+    Телефон нөмірі: ${client.client_phone}
+    Электрондық пошта: ${client.client_email}
+    Күй: ${client._is_admin ? 'Әкімші' : 'Тапсырыс беруші'}
+    ${client._is_black_list ? 'Тапсырыс беруші қара тізімге енгізілген' : ''}
+    
+    Осы тіркелуші туралы толығырақ білу үшін пәрменді жіберіңіз:
+    /view_client ${client._id}
+    Қара тізімге тапсырыс берушіні қосу үшін пәрменді жіберіңіз:
+    /add_black_list ${client._id}
+    Қара тізімге тапсырыс берушіні алу үшін пәрменді жіберіңіз:
+    /remove_black_list ${client._id}
+    ------
+
+  body-more-text: |
+    Тіркелуші идентификаторы: ${client._id}
+    Telegram қолданушы аты: ${client.telegram_username ? '@' + client.telegram_username : undefined}
+    Telegram first_name: ${client.telegram_first_name}
+
+    Аты: ${client.client_first_name}
+    Тегі: ${client.client_last_name}
+    Телефон нөмірі: ${client.client_phone}
+    Электрондық пошта: ${client.client_email}
+    Күй: ${client._is_admin ? 'Әкімші' : 'Тапсырыс беруші'}
+    ${client._is_black_list ? 'Тапсырыс беруші қара тізімге енгізілген' : ''}
+    Өтінім идентификаторы: ${client.client_id}
+    Өтінім нөмірі: ${client.client_app_number}
+    Өтінім беру күні: ${client.client_app_data}
+    Тіл: ${client.client_lang}
+    Ботта авторланған күн: ${client.data.getDate() > 10 ? client.data.getDate() : '0' + client.data.getDate()}.${(client.data.getMonth() + 1) > 10 ? (client.data.getMonth() + 1) : '0' + (client.data.getMonth() + 1)}.${client.data.getFullYear()}
+    ------
+
+  course:
+    info: |
+      Курстың идентификаторы: ${course.course_id}
+      Курстың атауы: "${course.course_name}"
+      Курстың бағасы: ${course.course_amount}
+      Статус: ${course.course_is_paid == 1 ? 'Төленген' : 'Төленбеген'}
+    
+  success: 
+    black_list-added: Пайдаланушы ${client.telegram_first_name} қара тізімге қосылды!
+    black_list-remove: Пайдаланушы ${client.telegram_first_name} қара тізімнен алынып тасталды!
+
+
+news-post:
+  text: |
+    Сіз хабарламаңызды барлық тіркелушілерге жіберіңіз:
+    Жібере аласыз:
+      - Қарапайым мәтін
+      - Сипаттамасымен және сипаттамасыз фотосурет
+      - Сипаттамасымен және сипаттамасыз бейне
+
+    Назар аударыңыз: бұл хабарламаны сіз жарияладыңыз және барлық тіркелушілерге жіберіледі!
+
+  button: ["Болдырмау"]
+  cancel-text: Әрекет тоқтатылды!
+
+  success-send: |
+    Сіздің хабарламаңыз барлық клиенттерге жіберілді!
+
+help: |
+  Қайырлы күн ${user.first_name}!
+  Егер сіз батырмаларды жоғалтсаңыз, команда /panels жіберіңіз
+
+  Қол жетімді командалар:
+  /view_client және тіркелуші идентификаторы - тіркелуші туралы мәліметтер
+  Мысал: /view_client 123456
+
+  /add_black_list және тіркелуші идентификаторы - қара тізімге тіркелушіні қосыңыз
+  Мысал: /add_black_list 123456
+
+  /remove_black_list және тіркелуші идентификаторы - қара тізімнен тіркелушіні  алып тастаңыз
+  Мысал: /remove_black_list 123456
+
+  /send_message және тіркелуші идентификаторы - пайдаланушыға хабарлама жіберу
+  Мысал: /send_message 123456
+
+send-to-support:
+  text: |
+    Пайдаланушыға ${client.client_last_name || client.telegram_first_name} ${client.client_first_name || ''} хабарлама жіберіңіз:
+  
+  button: ["Болдырмау"]
+
+  success:
+    cancel-text: Әрекет тоқтатылды!
+    send: Сіздің хабарламаңыз жіберілді!
+
+  error:
+    not-text: Қате пайда болды, тек мәтін жіберіңіз!
+    not-client: Қате пайда болды, тіркелуші табылмады! Әрекетті қайталаңыз
