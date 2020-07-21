@@ -53,16 +53,16 @@ app.action(/./gm, async (ctx, next) => {
     ctx.deleteMessage()
     ctx.answerCbQuery()
 
-    let user = await User.findById(ctx.from.id)
-
     switch(ctx.update.callback_query.data){
         case 'rus-lang':
             ctx.session.lang = 'ru'
             await ctx.reply('Установлен русский язык! Можно поменять язык в настройках')
+            ctx.scene.enter('login-scene')
         break
         case 'kaz-lang':
             ctx.session.lang = 'kz'
             await ctx.reply('Қазақ тілі орнатылды! Параметрлерде тілді өзгертуге болады')
+            ctx.scene.enter('login-scene')
         break
         case 'rus-lang-not-new-user':
             ctx.session.lang = 'ru'
@@ -76,12 +76,15 @@ app.action(/./gm, async (ctx, next) => {
         break
         default: next()
     }
-
-    if(!user) ctx.scene.enter('login-scene')
 })
 
 // Plug
 app.use(async (ctx, next) => {
+    if(ctx.match){
+        let callback_query_type = ctx.match.input.split('-')
+        if(callback_query_type[0] == 'approve_request_id' || callback_query_type[0] == 'not_approve_request_id') return next()
+    }
+
     let user = await User.findById(ctx.from.id)
     if(!user) return null
     next()
