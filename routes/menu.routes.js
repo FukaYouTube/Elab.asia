@@ -34,7 +34,7 @@ app.hears(/./gm, (ctx, next) => {
         break
         case messages.menu.buttons[1][0]: ctx.reply(messages['not-working']) // о нас
         break
-        case messages.menu.buttons[1][1]: ctx.reply(messages['not-working']) // наши контакты
+        case messages.menu.buttons[1][1]: MenuModules['contacts'](ctx) // наши контакты
         break
         case messages.menu.buttons[1][2]: MenuModules['location'](ctx) // местоположение
         break
