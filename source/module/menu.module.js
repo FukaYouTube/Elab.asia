@@ -48,6 +48,12 @@ module.exports = {
         if(user._is_admin) return ctx.replyWithMarkdown(messages['course']['not-found'], keyboard(messages.menu.buttons).oneTime().resize().extra())
         ctx.replyWithMarkdown(message || messages['course']['not-found'], keyboard(messages.course.menu).oneTime().resize().extra())
     },
+
+    // Get diplom
+    'get-diplom': async ctx => {
+        ctx.scene.enter('certificate-scene')
+    },
+
     // Update data course informations
     'update-data-course': async (ctx, next) => {        
         let user = await User.findById(ctx.from.id)

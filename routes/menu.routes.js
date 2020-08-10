@@ -32,17 +32,19 @@ app.hears(/./gm, (ctx, next) => {
         break
         case messages.menu.buttons[0][1]: MenuModules['course-info'](ctx) // мои курсы
         break
-        case messages.menu.buttons[1][0]: ctx.reply(messages['not-working']) // о нас
+        case messages.menu.buttons[1][0]: MenuModules['get-diplom'](ctx) // получить сертификат
         break
-        case messages.menu.buttons[1][1]: MenuModules['contacts'](ctx) // наши контакты
+        case messages.menu.buttons[1][1]: ctx.reply(messages['not-working']) // о нас
         break
-        case messages.menu.buttons[1][2]: MenuModules['location'](ctx) // местоположение
+        case messages.menu.buttons[2][0]: MenuModules['contacts'](ctx) // наши контакты
         break
-        case messages.menu.buttons[2][0]: MenuModules['faq'](ctx) // вопросы и ответы
+        case messages.menu.buttons[2][1]: MenuModules['location'](ctx) // местоположение
         break
-        case messages.menu.buttons[2][1]: ctx.scene.enter('help-scene') // тех.поддержка
+        case messages.menu.buttons[3][0]: MenuModules['faq'](ctx) // вопросы и ответы
         break
-        case messages.menu.buttons[3][0]: MenuModules['settings'](ctx) // настройки
+        case messages.menu.buttons[3][1]: ctx.scene.enter('help-scene') // тех.поддержка
+        break
+        case messages.menu.buttons[4][0]: MenuModules['settings'](ctx) // настройки
         break
 
         // курсы
