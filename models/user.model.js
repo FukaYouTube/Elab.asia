@@ -5,17 +5,12 @@ let userSchema = new Schema({
     telegram_username:      String, // Юзер клиента в телеграме
     telegram_first_name:    String, // Ник клиента в телеграме
 
-    client_id:              Number, // Номер клиента
-    client_email:           String, // Почта клиента
-    client_phone:           String, // Номер телефона клиента
     client_first_name:      String, // Имя клиента
     client_last_name:       String, // Фамилия клиента
-    client_app_data:        String, // Дата публикаций клиента
-    client_app_number:      String, // Номер заявки клиента
-    client_lang:            String, // Язык
-    client_app_id:          Number, // ХЗ что это
-    
-    course:                 [{}], // Массив с курсами
+    client_iin:             String, // ИИН клиента
+    client_phone:           String, // Номер телефона клиента
+    client_email:           String, // Почта клиента
+    elab_card:              String, // Хочет ли клиент получить карту
     
     _is_admin:              { type: Boolean, default: false }, // Админ
     _is_black_list:         { type: Boolean, default: false }, // Черный список
