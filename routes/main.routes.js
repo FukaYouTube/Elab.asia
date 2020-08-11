@@ -57,12 +57,12 @@ app.action(/./gm, async (ctx, next) => {
         case 'rus-lang':
             ctx.session.lang = 'ru'
             await ctx.reply('Установлен русский язык! Можно поменять язык в настройках')
-            ctx.scene.enter('login-scene')
+            ctx.scene.enter('auth-scene')
         break
         case 'kaz-lang':
             ctx.session.lang = 'kz'
             await ctx.reply('Қазақ тілі орнатылды! Параметрлерде тілді өзгертуге болады')
-            ctx.scene.enter('login-scene')
+            ctx.scene.enter('auth-scene')
         break
         case 'rus-lang-not-new-user':
             ctx.session.lang = 'ru'
