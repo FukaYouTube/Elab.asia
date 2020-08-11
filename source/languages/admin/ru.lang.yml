@@ -2,7 +2,7 @@ welcome: Добро пожаловать ${user.first_name}!
 
 menu:
   buttons: [
-    ["Список клиентов"],
+    ["Список клиентов", "Поиск по клиента"],
     ["Отправить всем рассылку"],
     ["Помощь"]
   ]
@@ -17,6 +17,7 @@ clients-info:
     Фамилия: ${client.client_last_name}
     Номер телефона: ${client.client_phone}
     Электронная почта: ${client.client_email}
+    ИИН: ${client.client_iin}
     Статус: ${client._is_admin ? 'Администратор' : 'Клиент'}
     ${client._is_black_list ? 'Клиент в чёрном списке' : ''}
     
@@ -35,25 +36,27 @@ clients-info:
     Фамилия: ${client.client_last_name}
     Номер телефона: ${client.client_phone}
     Электорнная почта: ${client.client_email}
+    ИИН: ${client.client_iin}
     Статус: ${client._is_admin ? 'Администратор' : 'Клиент'}
     ${client._is_black_list ? 'Клиент в черном списке' : ''}
-    ID заявки: ${client.client_id}
-    Номер заявки: ${client.client_app_number}
-    Дата заявки: ${client.client_app_data}
-    Язык: ${client.client_lang}
     Дата авторизаций в боте: ${client.data.getDate() > 10 ? client.data.getDate() : '0' + client.data.getDate()}.${(client.data.getMonth() + 1) > 10 ? (client.data.getMonth() + 1) : '0' + (client.data.getMonth() + 1)}.${client.data.getFullYear()}
     ------
-
-  course:
-    info: |
-      ID курса: ${course.course_id}
-      Название курса: "${course.course_name}"
-      Цена курса: ${course.course_amount}
-      Статус: ${course.course_is_paid == 1 ? 'Оплачено' : 'Не оплачено'}
     
   success: 
     black_list-added: Пользователь ${client.telegram_first_name} добавлен в черный список!
     black_list-remove: Пользователь ${client.telegram_first_name} удален с черного списка!
+
+client-find:
+  text: |
+    Чтобы найти клиента, отправьте мне имя клиента или фамилию:
+
+  error:
+    not-found: Клиент не найден в базе данных!
+  
+  success:
+    cancel-text: Действие было отменено!
+
+  buttons: ['Отмена']
 
 
 news-post:
