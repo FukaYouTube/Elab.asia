@@ -56,15 +56,7 @@ app.hears(/view_client\s([^+\"]+)/i, async ctx => {
     let client = await User.findById(ctx.match[1])
     
     let messages = yaml.safeLoad(fs.readFileSync(`source/languages/admin/${ctx.session.lang || 'ru'}.lang.yml`))
-    let message = StringParser.rules(messages['clients-info']['body-more-text'], { client })
-
-    if(client.course){
-        for(course of client.course){
-            message += StringParser.rules(messages['clients-info']['course']['info'], { course }) + '\n'
-        }    
-    }
-
-    ctx.reply(message, keyboard(messages.menu.buttons).oneTime().resize().extra())
+    ctx.reply(StringParser.rules(messages['clients-info']['body-more-text'], { client }), keyboard(messages.menu.buttons).oneTime().resize().extra())
 })
 app.hears(/add_black_list\s([^+\"]+)/i, async ctx => {
     let user = await User.findById(ctx.from.id)
@@ -115,6 +107,9 @@ app.hears(/./gm, async (ctx, next) => {
             })
 
             ctx.reply(message, inlineKeyboard(paginate(clients, 3, 1, clients.length / 3).keys.map(b => callbackButton(b.text, b.callback))).extra())
+        break
+        case messages.menu.buttons[0][1]:
+            ctx.scene.enter('client-find-scene')
         break
         case messages.menu.buttons[1][0]:
             ctx.scene.enter('news-scene')
