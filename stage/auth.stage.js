@@ -1,81 +1,77 @@
-// auth.stage.js
+const WizardScene = require('telegraf/scenes/wizard')
 
-const Wizard = require('telegraf/scenes/wizard')
-
-// Lib
+// ...
 const fs = require('fs')
-const yaml = require('js-yaml')
-const { StringParser } = require('string-compiler')
+const jsYAML = require('js-yaml')
 
-const nodemailer = require('nodemailer')
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_LOGIN,
-        pass: process.env.EMAIL_PASS
+// telegraf
+const { keyboard, removeKeyboard } = require('telegraf/markup')
+
+// User model
+const User = require('../models/user.model')
+
+// regex
+const iin_regex = /^((0[48]|[2468][048]|[13579][26])0229[1-6]|000229[34]|\d\d((0[13578]|1[02])(0[1-9]|[12]\d|3[01])|(0[469]|11)(0[1-9]|[12]\d|30)|02(0[1-9]|1\d|2[0-8]))[1-6])\d{5}$/gm
+
+// scene
+let scene = new WizardScene('auth-scene', ctx => {
+
+    let message = jsYAML.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))
+
+    ctx.session.reguster_users = []
+    ctx.replyWithMarkdown(message.welcome['new-user']['1-scene'], removeKeyboard().oneTime().resize().extra())
+    
+    return ctx.wizard.next()
+
+}, ctx => {
+
+    let message = jsYAML.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))
+
+    ctx.session.reguster_users.push([ctx.message.text.split(' ')])
+    ctx.replyWithMarkdown(message.welcome['new-user']['2-scene'])
+
+    return ctx.wizard.next()
+
+}, ctx => {
+
+    let message = jsYAML.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))
+
+    if(iin_regex.test(ctx.message.text.split(/[\s\n]/g)[0]) && Number(ctx.message.text.split(/[\s\n]/g)[1]) && ctx.message.text.split(/[\s\n]/g)[2]){
+        ctx.session.reguster_users.push([ctx.message.text.split(/[\s\n]/g)])
+        ctx.replyWithMarkdown(message.welcome['new-user']['3-scene'], keyboard(message.welcome['new-user'].buttons[0]).oneTime().resize().extra())
+        return ctx.wizard.next()
+    }else{
+        ctx.replyWithMarkdown(message.welcome['new-user'].error['error-2-scene'])
+        return ctx.scene.leave()
     }
-})
 
-// Import modules
-const APIRequest = require('../source/module/api.module')
+}, ctx => {
 
-// Regex email
-const emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+    let message = jsYAML.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))
 
-// Scene
-const WizardScene = new Wizard('login-scene', ctx => {
-
-    // import message in file
-    let messages = yaml.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))
-
-    // send message
-    ctx.replyWithMarkdown(StringParser.rules(messages.welcome['new-user'], { user: ctx.from }))
-
-    // next scene
+    ctx.replyWithMarkdown(message.welcome['new-user']['4-scene'], keyboard(message.welcome['new-user'].buttons[1]).oneTime().resize().extra())
     return ctx.wizard.next()
 
 }, async ctx => {
 
-    // import message in file
-    let messages = yaml.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))
-    let messagesEmail = yaml.safeLoad(fs.readFileSync(`source/languages/email/${ctx.session.lang || 'ru'}.lang.yml`))
+    let message = jsYAML.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))
 
-    // chekced messages
-    if(!ctx.message.text){
-        ctx.reply(messages['import-data-users']['error']['this-not-message'])
-        return ctx.scene.leave()
-    }
-
-    // chekced email
-    if(!emailRegex.test(ctx.message.text)){
-        ctx.reply(messages['import-data-users']['error']['this-not-email'])
-        return ctx.scene.leave()
-    }
-
-    await ctx.reply(messages['import-data-users']['info']['loading-text'])
-
-    // API request
-    APIRequest['get-api-request'](ctx.message.text).then(data => { 
-        if(!data){
-            ctx.reply(StringParser.rules(messages['import-data-users']['error']['not-found-email'], { email: ctx.message.text }))
-            return ctx.scene.leave()
-        }
-
-        ctx.session.email = {
-            code: Math.floor(1000 + Math.random() * 9000) + Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10),
-            mail: ctx.message.text
-        }
-
-        transporter.sendMail({
-            from: process.env.EMAIL_LOGIN,
-            to: ctx.message.text,
-            subject: messagesEmail.email.subject,
-            text: StringParser.rules(messagesEmail.email.text, { user: ctx.from, url: `https://t.me/ElabAsiaBot?start=email_accountActivation-${ctx.session.email.code}` })
-        }).catch(error => console.log(error))
-
-        ctx.reply(messagesEmail.email['success']['send-messages'])
-        return ctx.scene.leave()
+    let user = new User({
+        _id: ctx.from.id,
+        telegram_username: ctx.from.username,
+        telegram_first_name: ctx.from.first_name,
+        client_first_name: ctx.session.reguster_users[0][0][0],
+        client_last_name: ctx.session.reguster_users[0][0][1],
+        client_iin: ctx.session.reguster_users[1][0][0],
+        client_phone: ctx.session.reguster_users[1][0][1],
+        client_email: ctx.session.reguster_users[1][0][2],
+        elab_card: ctx.message.text
     })
+    user.save()
+
+    ctx.replyWithMarkdown(message.welcome['new-user'].done['success-register-user'], keyboard(message.menu.buttons).oneTime().resize().extra())
+    ctx.scene.leave()
+
 })
 
-module.exports = WizardScene
+module.exports = scene
