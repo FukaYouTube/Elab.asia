@@ -27,6 +27,11 @@ let scene = new WizardScene('auth-scene', ctx => {
 
     let message = jsYAML.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))
 
+    if(!ctx.message.text.split(' ')[0] || !ctx.message.text.split(' ')[1]){
+        ctx.replyWithMarkdown(message.welcome['new-user'].error['error-1-scene'])
+        return ctx.scene.leave()
+    }
+
     ctx.session.reguster_users.push([ctx.message.text.split(' ')])
     ctx.replyWithMarkdown(message.welcome['new-user']['2-scene'])
 
@@ -55,6 +60,11 @@ let scene = new WizardScene('auth-scene', ctx => {
 }, async ctx => {
 
     let message = jsYAML.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))
+
+    if(ctx.message.text === 'Да'){
+        let admins = await User.find({ _is_admin: true })
+        for(admin of admins) ctx.telegram.sendMessage(admin._id, `Новый клиент ${ctx.from.first_name} желает получить дебиторскую карту Elab.asia | ID клиента: ${ctx.from.id}`)
+    }
 
     let user = new User({
         _id: ctx.from.id,
