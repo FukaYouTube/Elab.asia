@@ -2,7 +2,8 @@ welcome: ${user.first_name} қош келдіңіз!
 
 menu:
   buttons: [
-    ["Тіркелушілер тізімі"],
+    ["Тіркелушілер тізімі", "Клиентті іздеу"],
+    ["Сертификат алу үшін клиенттер тізімі"],
     ["Барлығына тарату тізімін жіберу"],
     ["Көмектесіңдер"]
   ]
@@ -60,6 +61,11 @@ client-find:
 
   buttons: ['Болдырмау']
 
+get-certificate:
+  text: |
+    Клиент: ${client.client_last_name} ${client.client_first_name} (id клиентті: ${client._id})
+    Курсы бойынша: ${get_certificate_list.course_name}
+    Күні: ${get_certificate_list.date}
 
 news-post:
   text: |
