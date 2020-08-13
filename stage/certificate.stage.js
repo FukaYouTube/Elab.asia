@@ -41,6 +41,21 @@ const WizardScene = new Wizard('certificate-scene', ctx => {
     }
 
     let user = await User.find({ _is_admin: true })
+    let client = await User.findById(ctx.from.id)
+
+    for(course of client.get_certificate_list){
+        if(course.course_name === ctx.message.text){
+            ctx.reply(messages['send-req-certificate']['error']['again-request'], keyboard(messages.menu.buttons).oneTime().resize().extra())
+            return ctx.scene.leave()
+        }
+    }
+
+    client.get_certificate = true
+    client.get_certificate_list.push({
+        course_name: ctx.message.text,
+        date: new Date()
+    })
+    client.save()
     
     for(admin of user){
         ctx.telegram.sendMessage(admin._id, `Новый запрос от ${ctx.from.first_name} на получение сертификата по курсу: ${ctx.message.text} | ID клиента: ${ctx.from.id}`)
