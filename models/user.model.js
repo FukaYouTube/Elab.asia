@@ -11,6 +11,8 @@ let userSchema = new Schema({
     client_phone:           String, // Номер телефона клиента
     client_email:           String, // Почта клиента
     elab_card:              String, // Хочет ли клиент получить карту
+    get_certificate:        Boolean, // Хочет ли клиент получить сертификат
+    get_certificate_list:   [{}], // Список сертификатов
     
     _is_admin:              { type: Boolean, default: false }, // Админ
     _is_black_list:         { type: Boolean, default: false }, // Черный список
