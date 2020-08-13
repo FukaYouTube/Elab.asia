@@ -43,7 +43,7 @@ const WizardScene = new Wizard('certificate-scene', ctx => {
     let user = await User.find({ _is_admin: true })
     
     for(admin of user){
-        ctx.telegram.sendMessage(admin._id, `New request certificate: ${ctx.message.text} | from: ${ctx.from.id}`)
+        ctx.telegram.sendMessage(admin._id, `Новый запрос от ${ctx.from.first_name} на получение сертификата по курсу: ${ctx.message.text} | ID клиента: ${ctx.from.id}`)
     }
 
     ctx.reply(messages['send-req-certificate']['success']['send'], keyboard(messages.menu.buttons).oneTime().resize().extra())
