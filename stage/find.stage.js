@@ -33,7 +33,13 @@ let scene = new WizardScene('client-find-scene', ctx => {
 
     let message = 'List: \n\n'
     for(client of user){        
-        message += StringParser.rules(messages['clients-info']['body-text'], { client })
+        message += StringParser.rules(messages['clients-info']['body-more-text'], { client }) + '\n'
+
+        if(client.get_certificate){
+            for(course of client.get_certificate_list){
+                message += StringParser.rules(messages['clients-info']['course-certificate'], { course }) + '\n'
+            }
+        }
     }
 
     ctx.reply(message, keyboard(messages.menu.buttons).oneTime().resize().extra())
