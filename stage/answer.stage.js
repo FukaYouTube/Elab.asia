@@ -43,6 +43,7 @@ const WizardScene = new Wizard('answer-scene', async ctx => {
     }
 
     let client = await User.findById(ctx.session.send_message_to_id)
+    if(!client) return ctx.scene.leave()
     
     if(client){
         ctx.telegram.sendMessage(client._id, ctx.message.text)
