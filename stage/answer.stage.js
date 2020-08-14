@@ -20,6 +20,10 @@ const WizardScene = new Wizard('answer-scene', async ctx => {
     let messages = yaml.safeLoad(fs.readFileSync(`source/languages/admin/${ctx.session.lang || 'ru'}.lang.yml`))
     
     let client = await User.findById(ctx.session.send_message_to_id)
+    if(!client){
+        ctx.reply('Error, not find clients!')
+        return ctx.scene.leave()
+    }
 
     // send message
     ctx.replyWithMarkdown(StringParser.rules(messages['send-to-support']['text'], { client }), keyboard(messages['send-to-support']['button']).oneTime().resize().extra())
@@ -43,7 +47,6 @@ const WizardScene = new Wizard('answer-scene', async ctx => {
     }
 
     let client = await User.findById(ctx.session.send_message_to_id)
-    if(!client) return ctx.scene.leave()
     
     if(client){
         ctx.telegram.sendMessage(client._id, ctx.message.text)
