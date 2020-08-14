@@ -16,9 +16,6 @@ clients-info:
     Тіркелуші идентификаторы: ${client._id}
     Аты: ${client.client_first_name}
     Тегі: ${client.client_last_name}
-    Телефон нөмірі: ${client.client_phone}
-    Электрондық пошта: ${client.client_email}
-    ИИН: ${client.client_iin}
     Күй: ${client._is_admin ? 'Әкімші' : 'Тапсырыс беруші'}
     ${client._is_black_list ? 'Тапсырыс беруші қара тізімге енгізілген' : ''}
     
@@ -40,10 +37,16 @@ clients-info:
     Телефон нөмірі: ${client.client_phone}
     Электрондық пошта: ${client.client_email}
     ИИН: ${client.client_iin}
+    Клиент сертификат алғысы келе ме: ${client.get_certificate ? 'Иә' : 'Жоқ'}
     Күй: ${client._is_admin ? 'Әкімші' : 'Тапсырыс беруші'}
     ${client._is_black_list ? 'Тапсырыс беруші қара тізімге енгізілген' : ''}
     Ботта авторланған күн: ${client.data.getDate() > 10 ? client.data.getDate() : '0' + client.data.getDate()}.${(client.data.getMonth() + 1) > 10 ? (client.data.getMonth() + 1) : '0' + (client.data.getMonth() + 1)}.${client.data.getFullYear()}
     ------
+
+  course-certificate: |
+    Сертификаттау курстары:
+    Курстың атауы: ${course.course_name}
+    Күні: ${course.date}
     
   success: 
     black_list-added: Пайдаланушы ${client.telegram_first_name} қара тізімге қосылды!

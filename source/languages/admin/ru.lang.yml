@@ -16,9 +16,6 @@ clients-info:
     ID клиента: ${client._id}
     Имя: ${client.client_first_name}
     Фамилия: ${client.client_last_name}
-    Номер телефона: ${client.client_phone}
-    Электронная почта: ${client.client_email}
-    ИИН: ${client.client_iin}
     Статус: ${client._is_admin ? 'Администратор' : 'Клиент'}
     ${client._is_black_list ? 'Клиент в чёрном списке' : ''}
     
@@ -38,10 +35,16 @@ clients-info:
     Номер телефона: ${client.client_phone}
     Электорнная почта: ${client.client_email}
     ИИН: ${client.client_iin}
+    Хочет ли клиент получить сертификат: ${client.get_certificate ? 'Да' : 'Нет'}
     Статус: ${client._is_admin ? 'Администратор' : 'Клиент'}
     ${client._is_black_list ? 'Клиент в черном списке' : ''}
     Дата авторизаций в боте: ${client.data.getDate() > 10 ? client.data.getDate() : '0' + client.data.getDate()}.${(client.data.getMonth() + 1) > 10 ? (client.data.getMonth() + 1) : '0' + (client.data.getMonth() + 1)}.${client.data.getFullYear()}
     ------
+
+  course-certificate: |
+    Курсы на получение сертификата:
+    Название курса: ${course.course_name}
+    Дата: ${course.date}
     
   success: 
     black_list-added: Пользователь ${client.telegram_first_name} добавлен в черный список!
