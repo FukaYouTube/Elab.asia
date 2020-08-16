@@ -78,6 +78,11 @@ module.exports = {
         let messages = yaml.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))
         ctx.replyWithMarkdown(messages.contacts, keyboard(messages.menu.buttons).oneTime().resize().extra())
     },
+    'about': ctx => {
+        // import message in file
+        let messages = yaml.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))
+        ctx.replyWithMarkdown(messages.about, keyboard(messages.menu.buttons).oneTime().resize().extra())
+    },
     'faq': ctx => {
         // import message in file
         let messages = yaml.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))

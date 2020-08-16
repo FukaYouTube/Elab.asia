@@ -32,7 +32,7 @@ app.hears(/./gm, (ctx, next) => {
         break
         case messages.menu.buttons[0][1]: MenuModules['get-diplom'](ctx) // получить сертификат
         break
-        case messages.menu.buttons[1][0]: ctx.reply(messages['not-working']) // о нас
+        case messages.menu.buttons[1][0]: MenuModules['about'](ctx) // о нас
         break
         case messages.menu.buttons[1][1]: MenuModules['contacts'](ctx) // наши контакты
         break
