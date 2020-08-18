@@ -2,5 +2,6 @@
 .vscode
 
 client_db.txt
+client_db.json
 
 node_modules
