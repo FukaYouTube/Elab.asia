@@ -1,4 +1,6 @@
 .env
 .vscode
 
+client_db.txt
+
 node_modules
