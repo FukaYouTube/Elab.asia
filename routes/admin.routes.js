@@ -125,7 +125,7 @@ app.hears(/./gm, async (ctx, next) => {
                 let message = messages['clients-info']['header-text'] + '\n'
 
                 for(client of clients){
-                    message += StringParser.rules(messages['clients-info']['body-more-text'], { client })
+                    message += StringParser.rules(messages['clients-info']['body-more-text'], { client }) + '\n'
                     for(course of client.get_certificate_list){
                         message += StringParser.rules(messages['clients-info']['course-certificate'], { course }) + '\n\n'
                     }
