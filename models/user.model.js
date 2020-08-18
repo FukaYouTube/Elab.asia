@@ -16,7 +16,7 @@ let userSchema = new Schema({
     
     _is_admin:              { type: Boolean, default: false }, // Админ
     _is_black_list:         { type: Boolean, default: false }, // Черный список
-    data:                   { type: Date, default: Date.now } // Дата записи в базу данных
+    date:                   { type: Date, default: Date.now } // Дата записи в базу данных
 })
 
 module.exports = model('User', userSchema)
