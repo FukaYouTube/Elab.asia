@@ -24,7 +24,7 @@ let scene = new WizardScene('client-find-scene', ctx => {
 
     let messages = jsYAML.safeLoad(fs.readFileSync(`source/languages/admin/${ctx.session.lang || 'ru'}.lang.yml`))
 
-    if(ctx.message.text === messages['client-find'].buttons[0]){
+    if(!ctx.message.text || ctx.message.text === messages['client-find'].buttons[0]){
         ctx.reply(messages['client-find']['success']['cancel-text'], keyboard(messages.menu.buttons).oneTime().resize().extra())
         return ctx.scene.leave()
     }
