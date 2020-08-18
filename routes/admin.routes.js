@@ -57,7 +57,14 @@ app.hears(/view_client\s([^+\"]+)/i, async ctx => {
     let client = await User.findById(ctx.match[1])
     
     let messages = yaml.safeLoad(fs.readFileSync(`source/languages/admin/${ctx.session.lang || 'ru'}.lang.yml`))
-    ctx.reply(StringParser.rules(messages['clients-info']['body-more-text'], { client }), keyboard(messages.menu.buttons).oneTime().resize().extra())
+    
+    let message = StringParser.rules(messages['clients-info']['body-more-text'], { client })
+    
+    for(course of client.get_certificate_list){
+        message += StringParser.rules(messages['clients-info']['course-certificate'], { course }) + '\n'
+    }
+
+    ctx.reply(message, keyboard(messages.menu.buttons).oneTime().resize().extra())
 })
 app.hears(/add_black_list\s([^+\"]+)/i, async ctx => {
     let user = await User.findById(ctx.from.id)
@@ -118,7 +125,10 @@ app.hears(/./gm, async (ctx, next) => {
                 let message = messages['clients-info']['header-text'] + '\n'
 
                 for(client of clients){
-                    message += StringParser.rules(messages['clients-info']['body-text'], { client }) + '\n'
+                    message += StringParser.rules(messages['clients-info']['body-more-text'], { client })
+                    for(course of client.get_certificate_list){
+                        message += StringParser.rules(messages['clients-info']['course-certificate'], { course }) + '\n\n'
+                    }
                 }
 
                 fs.writeFileSync('source/db/client_db.txt', message, err => {
