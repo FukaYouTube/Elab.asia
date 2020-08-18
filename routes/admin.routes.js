@@ -9,6 +9,7 @@ const yaml = require('js-yaml')
 const { StringParser } = require('string-compiler')
 
 // Telegraf lib
+const { Extra } = require('telegraf')
 const { inlineKeyboard, callbackButton, keyboard } = require('telegraf/markup')
 
 // DataBase User models
@@ -99,29 +100,35 @@ app.hears(/./gm, async (ctx, next) => {
 
     switch(ctx.message.text){
         case messages.menu.buttons[0][0]:
-            let clients = await User.find({})
-            let message = messages['clients-info']['header-text'] + '\n'
-            
-            paginate(clients, 3, 1, clients.length).arr.map(client => {
-                message += StringParser.rules(messages['clients-info']['body-text'], { client }) + '\n'
-            })
+            User.find({}).then(clients => {
+                let message = messages['clients-info']['header-text'] + '\n'
 
-            ctx.reply(message, inlineKeyboard(paginate(clients, 3, 1, (clients.length / 3 > Math.floor(clients.length / 3) ? Math.floor(clients.length / 3) + 1 : clients.length / 3)).keys.map(b => callbackButton(b.text, b.callback))).extra())
+                paginate(clients, 3, 1, clients.length).arr.map(client => {
+                    message += StringParser.rules(messages['clients-info']['body-text'], { client }) + '\n'
+                })
+
+                ctx.reply(message, inlineKeyboard(paginate(clients, 3, 1, (clients.length / 3 > Math.floor(clients.length / 3) ? Math.floor(clients.length / 3) + 1 : clients.length / 3)).keys.map(b => callbackButton(b.text, b.callback))).extra())
+            })
         break
         case messages.menu.buttons[0][1]:
             ctx.scene.enter('client-find-scene')
         break
         case messages.menu.buttons[1][0]:
-            let client_certificate = await User.find({ get_certificate: true })
-            
-            let msg = ''
-            for(client of client_certificate){
-                for(client_get_certificate of client.get_certificate_list){
-                    msg += StringParser.rules(messages['get-certificate'].text, { client, get_certificate_list: client_get_certificate }) + '\n'
-                }
-            }
+            User.find({}).then(clients => {
+                let message = messages['clients-info']['header-text'] + '\n'
 
-            ctx.reply(msg, keyboard(messages.menu.buttons).oneTime().resize().extra())
+                for(client of clients){
+                    message += StringParser.rules(messages['clients-info']['body-text'], { client }) + '\n'
+                }
+
+                fs.writeFileSync('source/db/client_db.txt', message, err => {
+                    if(err) return console.log(err)
+                    console.log('Saved clients list to path: source/db/')
+                })
+
+                let extra = Extra.caption(`${clients.length} - clients!`).markup(keyboard(messages.menu.buttons).oneTime().resize())
+                ctx.replyWithDocument({ source: 'source/db/client_db.txt' }, extra)
+            })
         break
         case messages.menu.buttons[2][0]:
             ctx.scene.enter('news-scene')
