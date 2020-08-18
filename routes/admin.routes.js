@@ -141,9 +141,20 @@ app.hears(/./gm, async (ctx, next) => {
             })
         break
         case messages.menu.buttons[2][0]:
-            ctx.scene.enter('news-scene')
+            User.find({}).then(clients => {
+                fs.writeFileSync('source/db/client_db.json', JSON.stringify(clients), err => {
+                    if(err) return console.log(err)
+                    console.log('Saved clients list to path: source/db/')
+                })
+
+                let extra = Extra.caption(`${clients.length} - clients!`).markup(keyboard(messages.menu.buttons).oneTime().resize())
+                ctx.replyWithDocument({ source: 'source/db/client_db.json' }, extra)
+            })
         break
         case messages.menu.buttons[3][0]:
+            ctx.scene.enter('news-scene')
+        break
+        case messages.menu.buttons[4][0]:
             ctx.reply(StringParser.rules(messages.help, { user: ctx.from }), keyboard(messages.menu.buttons).oneTime().resize().extra())
         break
         default: next()
