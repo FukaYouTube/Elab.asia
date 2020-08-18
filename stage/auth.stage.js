@@ -79,6 +79,7 @@ let scene = new WizardScene('auth-scene', ctx => {
     })
     user.save()
 
+    ctx.session.reguster_users = ''
     ctx.replyWithMarkdown(message.welcome['new-user'].done['success-register-user'], keyboard(message.menu.buttons).oneTime().resize().extra())
     ctx.scene.leave()
 
