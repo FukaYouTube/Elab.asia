@@ -30,7 +30,7 @@ module.exports = {
     'user-info': async ctx => {
         // import message in file
         let messages = yaml.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))
-        User.findById(ctx.from.id).then(user => ctx.replyWithMarkdown(StringParser.rules(messages['user-info'], { user: ctx.from, client: user }), keyboard(messages.menu.buttons).oneTime().resize().extra()))
+        User.findById(ctx.from.id).then(user => ctx.replyWithMarkdown(StringParser.rules(messages['user-info'].text, { user: ctx.from, client: user }), keyboard(messages['user-info'].menu).oneTime().resize().extra()))
     },
 
     // Course information
@@ -52,6 +52,23 @@ module.exports = {
     // Get diplom
     'get-diplom': async ctx => {
         ctx.scene.enter('certificate-scene')
+    },
+
+    // Get elab card
+    'get-elab-card': async ctx => {
+        // import message in file
+        let messages = yaml.safeLoad(fs.readFileSync(`source/languages/${ctx.session.lang || 'ru'}.lang.yml`))
+
+        let client = await User.findById(ctx.from.id)
+
+        if(client.elab_card && client.elab_card == 'Да') return ctx.replyWithMarkdown(messages['again-request-elab-card'], keyboard(messages.menu.buttons).oneTime().resize().extra())
+        client.elab_card = 'Да'
+        client.save()
+
+        let admins = await User.find({ _is_admin: true })
+        for(admin of admins){
+            ctx.telegram.sendMessage(admin._id, `Новый запрос от ${ctx.from.id} | Клиент желает получить дисконтную карту Elab.asia`)
+        }
     },
 
     // Update data course informations
