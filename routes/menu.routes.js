@@ -45,6 +45,12 @@ app.hears(/./gm, (ctx, next) => {
         case messages.menu.buttons[3][0]: MenuModules['settings'](ctx) // настройки
         break
 
+        // изменить данные
+        case messages['user-info'].menu[0][0]: ctx.scene.enter('edit-user-info-scene') // изменить данные
+        break
+        case messages['user-info'].menu[1][0]: MenuModules['get-elab-card'](ctx)  // получить карту от Elab.asia
+        break
+
         // настройка
         case messages.settings.menu[0][0]: SettingsModules['edit-lang'](ctx) // изменить язык
         break
