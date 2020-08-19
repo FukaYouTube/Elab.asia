@@ -40,7 +40,7 @@ clients-info:
     Хочет ли клиент получить сертификат: ${client.get_certificate ? 'Да' : 'Нет'}
     Статус: ${client._is_admin ? 'Администратор' : 'Клиент'}
     ${client._is_black_list ? 'Клиент в черном списке' : ''}
-    Дата авторизаций в боте: ${client.data.getDate() > 10 ? client.data.getDate() : '0' + client.data.getDate()}.${(client.data.getMonth() + 1) > 10 ? (client.data.getMonth() + 1) : '0' + (client.data.getMonth() + 1)}.${client.data.getFullYear()}
+    Дата авторизаций в боте: ${client.date.getDate() > 10 ? client.date.getDate() : '0' + client.date.getDate()}.${(client.date.getMonth() + 1) > 10 ? (client.date.getMonth() + 1) : '0' + (client.date.getMonth() + 1)}.${client.date.getFullYear()}
     ------
 
   course-certificate: |
